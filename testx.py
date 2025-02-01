@@ -51,32 +51,26 @@ def clean_image_url(url: str) -> str:
 @app.post("/api/search")
 async def search_products(search_query: SearchQuery):
     try:
-        # Initialize BraveSearch
         loader = BraveSearchLoader(
             query=search_query.query,
             api_key=BRAVE_API_KEY,
             search_kwargs={"count": 3}
         )
-        
         docs = loader.load()
         urls = [doc.metadata["link"] for doc in docs]
-        
         json_results = []
-        
-        # Create initial empty JSON files
-        for i in range(1, 4):
-            empty_data = {"objects": []}
-            save_json_file(empty_data, f'diffbot_response_{i}.json')
-        
-        for i, url in enumerate(urls, 1):
+
+        for url in urls:
             encoded_url = quote(url, safe='')
             endpoint = f'https://api.diffbot.com/v3/product?token={DIFFBOT_API_KEY}&url={encoded_url}'
-            
             response = requests.get(endpoint)
+            
             if not response.ok:
                 continue
                 
             json_data = response.json()
+            
+            # Clean up image URLs
             if 'objects' in json_data:
                 for obj in json_data['objects']:
                     if 'images' in obj:
@@ -86,15 +80,14 @@ async def search_products(search_query: SearchQuery):
                         ]
                         for img in obj['images']:
                             img['url'] = clean_image_url(img['url'])
-            save_json_file(json_data, f'diffbot_response_{i}.json')
-            
+                            
             if 'objects' in json_data and json_data['objects']:
                 json_results.append(json_data)
-        
+                
         return {"status": "success", "results": json_results}
-    
+        
     except Exception as e:
-        print(f"Error in search_products: {e}")  # Debug print
+        print(f"Error in search_products: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
