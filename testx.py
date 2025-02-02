@@ -7,6 +7,8 @@ from langchain_community.document_loaders import BraveSearchLoader
 import os
 from pydantic import BaseModel
 from dotenv import load_dotenv
+import auto_scraper
+
 
 # Load environment variables
 load_dotenv()
