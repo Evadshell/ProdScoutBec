@@ -6,6 +6,10 @@ from urllib.parse import quote
 from langchain_community.document_loaders import BraveSearchLoader
 import os
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI()
 
@@ -17,8 +21,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DIFFBOT_API_KEY = '939b1f619b77603bacb76713807e5c15'
-BRAVE_API_KEY = "BSA8hqEXArzukdTLYiHgcgIAKxHk1OK"
+DIFFBOT_API_KEY = os.getenv("DIFFBOT_API_KEY")
+BRAVE_API_KEY = os.getenv("BRAVE_API_KEY")
 
 # Get the absolute path to the client/public directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
