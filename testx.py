@@ -15,11 +15,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+FRONTEND_URL = "https://prod-scout.vercel.app/"
 
 DIFFBOT_API_KEY = os.getenv("DIFFBOT_API_KEY")
 BRAVE_API_KEY = os.getenv("BRAVE_API_KEY")
