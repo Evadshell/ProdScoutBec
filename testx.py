@@ -7,8 +7,7 @@ from langchain_community.document_loaders import BraveSearchLoader
 import os
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import auto_scraper
-
+from autoscraper import AutoScraper
 
 # Load environment variables
 load_dotenv()
@@ -22,8 +21,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-FRONTEND_URL = "https://prod-scout.vercel.app/"
 
+scraper = AutoScraper()
+
+FRONTEND_URL = "https://prod-scout.vercel.app/"
 DIFFBOT_API_KEY = os.getenv("DIFFBOT_API_KEY")
 BRAVE_API_KEY = os.getenv("BRAVE_API_KEY")
 
